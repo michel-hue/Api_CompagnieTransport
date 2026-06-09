@@ -10,7 +10,7 @@ export class RolesGuard implements CanActivate {
     if (!roles) return true; // pas de rôle requis
 
     const request = context.switchToHttp().getRequest();
-    const user = request.user; // injecté par AuthGuard
+    const user = request.user; 
 
     const userRole = user?.user_metadata?.role;
 

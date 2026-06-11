@@ -1,19 +1,27 @@
-import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { AuthGuard } from './auth.guard';
-import { JwtModule } from '@nestjs/jwt';
-
-import { SupabaseModule } from 'src/supabase/supabase.module';
+import { Module } from "@nestjs/common";
+import { JwtModule } from "@nestjs/jwt";
+import { AuthService } from "./auth.service";
+import { AuthController } from "./auth.controller";
+import { AuthGuard } from "./auth.guard";
+import { SupabaseModule } from "src/supabase/supabase.module";
 
 
 @Module({
-   imports: [
+  imports: [
+
+    SupabaseModule,
+
     JwtModule.register({
-      secret: process.env.SUPABASE_JWT_SECRET,
-      signOptions: { expiresIn: '3600s' },
-    }),SupabaseModule
+      secret: process.env.JWT_SECRET ?? "MYSECRETKEY",
+      signOptions: { expiresIn: "24h", algorithm: "HS256" },
+    }),
   ],
-  providers: [AuthService, AuthGuard],
-  exports: [AuthService, AuthGuard], 
+  providers: [
+    AuthService,
+    AuthGuard,
+
+  ],
+  controllers: [AuthController],
+  exports: [AuthService, AuthGuard],
 })
 export class AuthModule {}
